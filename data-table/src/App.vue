@@ -3,7 +3,8 @@
     <div class="container">
       {{ msg }}
     </div>
-    <v-table :rows="rows"></v-table>
+    <v-table
+    :rows="rows"></v-table>
   </div>
 </template>
 
@@ -43,6 +44,16 @@ export default {
 
 <style>
   body {
-    font-family: 'Microsoft Yahei';
+    font-family: "Helvetica Neue","Helvetica","Arial","Microsoft Yahei";
+  }
+  .clear-fix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+  .clear-fix {
+    *+height:1%;
   }
 </style>
