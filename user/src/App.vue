@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="page" id="user">
-      <a href="http://www.tgbus.com/" class="top"></a>
+      <div class="page-title">直播观众页面</div>
       <div id="playground">
         <div class="room">
           <message
@@ -11,13 +11,12 @@
           v-for="message of list"></message>
         </div>
       </div>
-      <a href="http://app.nga.cn/phone.html" rel="noreferrer" target="_blank" class="console"></a>
+      <div class="console"><span>{{ msg }}</span></div>
     </div>
   </div>
 </template>
 
 <script>
-import wx from 'wx'
 import store from 'store'
 import sdk from './api/sdk'
 import Wilddog from 'Wilddog'
@@ -32,13 +31,7 @@ export default {
       listen: '',
       list: [],
       keys: [],
-      msg: '正在加载中...',
-      wechat: {
-        title: 'TG兽吧直播室：魔兽影片主创邓肯·琼斯演员吴彦祖，葆拉·帕顿将与粉丝们见面！',
-        link: 'http://lab.myriptide.com/wow/',
-        imgUrl: 'http://lab.myriptide.com/wow/wechat.jpg',
-        desc: '为您带来现场第一时间图文及音频直播。'
-      }
+      msg: '正在加载中...'
     }
   },
   created () {
@@ -47,10 +40,6 @@ export default {
       if (err) {
         console.log(err)
       } else {
-        wx.ready(() => {
-          wx.onMenuShareTimeline(this.wechat)
-          wx.onMenuShareAppMessage(this.wechat)
-        })
         ref.on('child_added', (snapshot) => {
           let obj = snapshot.val()
           obj.key = snapshot.key()
@@ -92,11 +81,62 @@ body, html {
   width: 100%;
   overflow-x: hidden;
 }
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  color: #3cc51f;
+  font-weight: 400;
+  background: #fff;
+}
 .page-desc {
   text-align: center;
   font-size: 1rem;
   margin-top: 1rem;
   color: #888;
+}
+#info-bar {
+  margin-top: 5rem;
+}
+#recording, #uploading {
+  opacity: 0;
+  transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  -webkit-transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+#countdown {
+  width: 80%;
+  height: 1.5rem;
+  background: rgba(60, 197, 31, 0.4);
+  margin: 0 auto;
+  text-align: center;
+  line-height: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  transition: all 1000ms;
+}
+.circle-btn {
+  display: block;
+  width: 8rem;
+  height: 8rem;
+  margin: 0 auto;
+  background: url('./assets/b.png') center center no-repeat;
+  background-size: 30%;
+  margin-top: 5rem;
+  border-radius: 50%;
+  border: 3px solid #efefef !important;
+  outline: none;
+  -webkit-touch-callout:none;
+  box-shadow: 0 6px 36px rgba(60, 197, 31, 0.5),
+            0 1px 0 #efefef,
+            1px 3px 0 #efefef,
+            2px 4px 0 #efefef,
+            2px 5px 0 #efefef,
+            2px 6px 0 #efefef;
+  cursor: pointer;
+  transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+  -webkit-transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.circle-btn:active {
+  box-shadow: 0 5px 12px rgba(60, 197, 31, 0.8), 0 3px 0 #efefef;
 }
 .spinner {
   width: 5rem;
@@ -141,9 +181,9 @@ body, html {
   z-index: 2;
 }
 #playground {
-  padding-top: 60px;
+  padding-top: 3.2rem;
   width: 100%;
-  height: calc(100% - 130px);
+  height: 80%;
   background: #efefef;
   overflow: auto;
 }
@@ -154,25 +194,6 @@ body, html {
   text-align: center;
 }
 .console {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  z-index: 2;
-  height: 70px;
-  background: url('http://lab.myriptide.com/wow/bottom.jpg') #212121 50% no-repeat;
-  background-size: contain;
-}
-#user .top {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  z-index: 2;
-}
-.top {
-  height: 60px;
-  background: url('http://lab.myriptide.com/wow/top.jpg') #fff 50% no-repeat;
-  background-size: 70%;
+
 }
 </style>

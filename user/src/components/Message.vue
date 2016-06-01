@@ -32,7 +32,7 @@
       <img src="http://lab.myriptide.com/wow/avator.jpg">
     </span>
     <span class="image-rect">
-      <img :src="localId">
+      <img src="https://d13yacurqjgara.cloudfront.net/users/60166/screenshots/2661808/eagle.jpg">
     </span>
   </p>
 </template>
@@ -75,9 +75,6 @@ export default {
     },
     minute () {
       const date = new Date(this.message.timestamp)
-      if (date.getMinutes() < 10) {
-        return '0' + date.getMinutes()
-      }
       return date.getMinutes()
     }
   },
@@ -89,7 +86,6 @@ export default {
       }
       wx.downloadVoice({
         serverId: this.message.serverId,
-        isShowProgressTips: 0,
         success: (res) => {
           this.localId = res.localId
           this.listenVoice()
@@ -113,7 +109,6 @@ export default {
       wx.ready(() => {
         wx.downloadImage({
           serverId: this.message.serverId,
-          isShowProgressTips: 0,
           success: (res) => {
             this.localId = res.localId
           }
