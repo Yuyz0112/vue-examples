@@ -1,11 +1,19 @@
 import reqwest from 'reqwest'
 
-const domain = 'http://hq.sinajs.cn/list=gb_'
+const domain = 'http://api.myriptide.com/wow/'
 
 export default {
-  get (id, callback) {
+  getDate (callback) {
     reqwest({
-      url: domain + id,
+      url: `${domain}date`,
+      crossOrigin: true
+    })
+    .then(val => callback(null, val))
+    .catch(e => callback(e))
+  },
+  getLaddar (region, laddar, callback) {
+    reqwest({
+      url: `${domain}${region}/${laddar}`,
       crossOrigin: true
     })
     .then(val => callback(null, val))
