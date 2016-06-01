@@ -1,7 +1,7 @@
 {
-  "name": "stock",
+  "name": "data-table",
   "version": "1.0.0",
-  "description": "Stock dashboard example",
+  "description": "Data table component",
   "author": "aryu",
   "private": true,
   "scripts": {
