@@ -2,20 +2,9 @@
   <input
   v-model="query"
   type="text">
-  <p>
-    <input
-    v-model="rating"
-    :min="range[0]"
-    :max="range[1]"
-    type="range">
-    {{ rating }}
-  </p>
-  <select v-model="class">
-    <option value="0" disabled selected>请选择职业</option>
-    <option
-    v-for="(key, val) in classes"
-    :value="key">{{ val.name }}</option>
-  </select>
+  <input
+  v-model="page"
+  type="number">
   <table class="responsive-table">
     <thead>
       <tr>
@@ -33,7 +22,10 @@
     </thead>
     <tbody>
       <tr
-      v-for="player of players"
+      v-for="player of players
+      | filterBy query in 'name' 'realmName'
+      | orderBy sort.key sort.val
+      | limitBy 20 (page-1)*20"
       :class="player.factionId? 'horde':'alliance'">
         <th>{{ player.ranking }}</th>
         <th>{{ player.rating }}</th>
@@ -58,32 +50,23 @@
       </tr>
     </tbody>
   </table>
-  <p class="pagination">
-    <a class="button" @click="page--">上一页</a>
-    当前第<input v-model="page" type="text" class="page">页 共{{ total }}页
-    <a class="button" @click="page++">下一页</a>
-  </p>
 </template>
 
 <script>
 import Bar from './Bar'
-import { classIdToIcon, classes } from '../assets/utils'
+import { classIdToIcon } from '../assets/utils'
 
 export default {
   components: { Bar },
   data () {
     return {
       limit: 20,
-      rating: 0,
-      class: 0,
-      classes: classes,
       query: '',
       page: 1,
       sort: {
         key: 'ranking',
         val: 1
-      },
-      total: 0
+      }
     }
   },
   props: {
@@ -96,81 +79,14 @@ export default {
   },
   computed: {
     players () {
-      let arr = []
       this.rows = this.handleBefore(this.rows)
-      arr = this.classFilter(this.rows)
-      arr = this.queryFilter(arr)
-      arr = this.ratingFilter(arr)
-      this.sortTable(arr)
-      arr = this.paginate(arr)
-      arr = this.handleAfter(arr)
-      return arr
-    },
-    range () {
-      if (this.rows[0]) {
-        return [this.rows[this.rows.length - 1].rating, this.rows[0].rating]
-      }
-      return [0, 0]
+      return this.rows
     }
   },
   methods: {
-    classFilter (arr) {
-      console.log('filter class')
-      this.class = parseInt(this.class)
-      if (this.class === 0) {
-        return arr
-      }
-      arr = arr.filter((item) => {
-        if (item.classId === this.class) {
-          return item
-        }
-      })
-      return arr
-    },
-    queryFilter (arr) {
-      console.log('filter query')
-      arr = arr.filter((item) => {
-        if (this.query === '' || item.name.indexOf(this.query) !== -1 || item.realmName.indexOf(this.query) !== -1) {
-          return true
-        }
-      })
-      return arr
-    },
-    ratingFilter (arr) {
-      console.log('filter rating')
-      arr = arr.filter((item) => {
-        if (item.rating >= this.rating) {
-          return item
-        }
-      })
-      return arr
-    },
-    sortTable (arr) {
-      console.log('sort')
-      arr.sort((a, b) => {
-        if (a[this.sort.key] > b[this.sort.key]) {
-          return this.sort.val
-        } else {
-          if (a[this.sort.key] < b[this.sort.key]) {
-            return -this.sort.val
-          }
-        }
-      })
-    },
-    paginate (arr) {
-      console.log('paginate')
-      this.total = Math.ceil(arr.length / this.limit)
-      let page = parseInt(this.page - 1)
-      if (page < 0) {
-        page = 0
-      }
-      arr = arr.slice(this.limit * page, this.limit * (page + 1))
-      return arr
-    },
     handleBefore (arr) {
-      if (this.rows[0] && this.rows[0].weeklyRate === undefined) {
-        console.log('before handle')
-        this.rating = this.range[0]
+      console.log('before handle')
+      if (this.rows[0]) {
         arr.forEach((item) => {
           if (item.weeklyWins === 0 && item.weeklyLosses === 0) {
             item.weeklyRate = -1
@@ -182,20 +98,9 @@ export default {
           } else {
             item.seasonRate = item.seasonWins / (item.seasonWins + item.seasonLosses)
           }
+          item.classIcon = classIdToIcon(item.classId)
         })
       }
-      return arr
-    },
-    handleAfter (arr) {
-      let n = 0
-      arr.forEach((item) => {
-        if (item.classIcon === undefined) {
-          n++
-          item.classIcon = classIdToIcon(item.classId)
-        }
-      })
-      console.log('handle after, ' + n)
-      console.log('********************')
       return arr
     }
   }
@@ -203,12 +108,6 @@ export default {
 </script>
 
 <style scoped>
-  .pagination {
-    text-align: center;
-  }
-  .page {
-    width: 4em;
-  }
   th {
     font-weight: normal;
   }

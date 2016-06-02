@@ -96,11 +96,8 @@ const classes = {
 const raceIdToName = (id) => {
   return races[id].name
 }
-const raceIdToIcon = (id) => {
-  return id
-}
 const classIdToIcon = (id) => {
   return classes[id].icon
 }
 
-export { raceIdToName, raceIdToIcon, classIdToIcon }
+export { raceIdToName, classIdToIcon, classes }
