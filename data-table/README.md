@@ -1,27 +1,7 @@
-# stock
+# data-table
 
-> Stock dashboard example
+> 实现多条件筛选、搜索、排序及分页的表格功能。
 
-## Build Setup
+# 对应文章
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
-```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+> ![Vue.js实践系列第二篇][https://segmentfault.com/a/1190000005631012]
