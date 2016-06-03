@@ -1,8 +1,6 @@
 <template>
   <div class="container">
-    <div class="container">
-      {{ msg }}
-    </div>
+    <p>Last modified at: {{ msg }}</p>
     <v-table
     :rows="rows"></v-table>
   </div>

@@ -21,12 +21,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr
-      v-for="player of players
-      | filterBy query in 'name' 'realmName'
-      | orderBy sort.key sort.val
-      | limitBy 20 (page-1)*20"
-      :class="player.factionId? 'horde':'alliance'">
+        <tr
+        v-for="player of players
+        | filterBy query in 'name' 'realmName'
+        | orderBy sort.key sort.val
+        | limitBy 20 (page-1)*20"
+        :class="player.factionId? 'horde':'alliance'">
         <th>{{ player.ranking }}</th>
         <th>{{ player.rating }}</th>
         <th>

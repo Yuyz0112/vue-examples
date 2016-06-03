@@ -1,7 +1,8 @@
 <template>
   <input
   v-model="query"
-  type="text">
+  type="text"
+  placeholder="搜索资料及服务器，区分大小写">
   <p>
     <input
     v-model="rating"
@@ -59,9 +60,9 @@
     </tbody>
   </table>
   <p class="pagination">
-    <a class="button" @click="page--">上一页</a>
+    <a class="button" @click="changePage(-1)">上一页</a>
     当前第<input v-model="page" type="text" class="page">页 共{{ total }}页
-    <a class="button" @click="page++">下一页</a>
+    <a class="button" @click="changePage(1)">下一页</a>
   </p>
 </template>
 
@@ -115,39 +116,46 @@ export default {
   },
   methods: {
     classFilter (arr) {
-      console.log('filter class')
+      let n = 0
       this.class = parseInt(this.class)
       if (this.class === 0) {
         return arr
       }
       arr = arr.filter((item) => {
+        n++
         if (item.classId === this.class) {
           return item
         }
       })
+      console.log('filter class, ' + n)
       return arr
     },
     queryFilter (arr) {
-      console.log('filter query')
+      let n = 0
       arr = arr.filter((item) => {
+        n++
         if (this.query === '' || item.name.indexOf(this.query) !== -1 || item.realmName.indexOf(this.query) !== -1) {
           return true
         }
       })
+      console.log('filter query, ' + n)
       return arr
     },
     ratingFilter (arr) {
-      console.log('filter rating')
+      let n = 0
       arr = arr.filter((item) => {
+        n++
         if (item.rating >= this.rating) {
           return item
         }
       })
+      console.log('filter rating, ' + n)
       return arr
     },
     sortTable (arr) {
-      console.log('sort')
+      let n = 0
       arr.sort((a, b) => {
+        n++
         if (a[this.sort.key] > b[this.sort.key]) {
           return this.sort.val
         } else {
@@ -156,6 +164,7 @@ export default {
           }
         }
       })
+      console.log('sort, ' + n)
     },
     paginate (arr) {
       console.log('paginate')
@@ -197,6 +206,21 @@ export default {
       console.log('handle after, ' + n)
       console.log('********************')
       return arr
+    },
+    changePage (num) {
+      if (num === 1) {
+        if (this.page < this.total) {
+          this.page++
+        } else {
+          window.alert('已是最后一页')
+        }
+      } else {
+        if (this.page > 1) {
+          this.page--
+        } else {
+          window.alert('已是第一页')
+        }
+      }
     }
   }
 }
